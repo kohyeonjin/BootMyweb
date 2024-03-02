@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.coding404.myweb.command.ProductVO;
+import com.coding404.myweb.command.TopicVO;
 
 @Mapper
 public interface ProductMapper {

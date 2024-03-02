@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
 	<title>연습용</title>
@@ -115,37 +115,21 @@
 												<th>등록일</th>
 												<th>수정/삭제</th>
 											</tr>
+											
+											<tr th:each="vo,status :  ${list}">
+												<td>[[${status.count}]]</td>
+												<td>[[${vo.topic_id}]]</td>
+												<td>[[${vo.topic_title}]]</td>
+												<td><a th:href="@{topicDetail(topic_tno = ${vo.topic_tno})}">[[${vo.topic_content}]]</a></td>
+												<td th:text="${#strings.substring(vo.topic_regdate,0,10)}"></td>
+												<td>
+                                                    <a th:href="@{topicUpdate(topic_tno = ${vo.topic_tno})}">수정</a>
+                                                    /
+                                                    <a th:href="@{deleteForm(topic_tno = ${vo.topic_tno})}">삭제</a>
+                                                </td>
+											</tr>
+
 												
-											<tr>
-												<td>1</td>
-												<td>admin</td>
-												<td>오늘은 해가뜨려나?</td>
-												<td>
-													오늘은 비가오려나?
-												</td>
-												<td>2016-01-01</td>
-												<td>
-                                                    <a href="#">수정</a>
-                                                    /
-                                                    <a href="#">삭제</a>
-                                                </td>
-											</tr>
-
-											<tr>
-												<td>1</td>
-												<td>admin</td>
-												<td>세상에서 가장 가난한 임금은?</td>
-												<td>
-													최저임금
-												</td>
-												<td>2016-01-01</td>
-                                                <td>
-                                                    <a href="#">수정</a>
-                                                    /
-                                                    <a href="#">삭제</a>
-                                                </td>
-											</tr>
-
 										</table>
 
 
