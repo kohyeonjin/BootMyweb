@@ -14,6 +14,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.coding404.myweb.command.ProductVO;
 import com.coding404.myweb.product.service.ProductService;
+import com.coding404.myweb.util.Criteria;
+import com.coding404.myweb.util.PageVO;
 
 @Controller
 @RequestMapping("/product")
@@ -24,11 +26,17 @@ public class ProductController {
 		ProductService productService;
 	
 		@GetMapping("/productList")
-		public String list(Model model) {
+		public String list(Model model, Criteria cri) { //매개변수가 없으면 기본값, 있으면 생성자를 통해서 값을 받아줌
 			
-		
-			ArrayList<ProductVO> list = productService.getList();
+			
+			ArrayList<ProductVO> list = productService.getList(cri);
+			int total = productService.getTotal(cri);
+			PageVO pageVO = new PageVO(cri , total); //페이지네이션
+			
+			model.addAttribute("pageVO" , pageVO);
 			model.addAttribute("list", list);
+			
+			System.out.println(pageVO.toString());
 			
 			return "product/productList";
 		}

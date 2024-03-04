@@ -97,7 +97,7 @@
                                                 <tr>
                                                     <th>등록일</th>
                                                     <td>
-                                                        <span>[[${vo.topic_regdate}]]</span>
+                                                        <span th:text="${#strings.substring(vo.topic_regdate,0,10)}"></span>
                                                     </td>
                                                 </tr>
                                                 <tr>

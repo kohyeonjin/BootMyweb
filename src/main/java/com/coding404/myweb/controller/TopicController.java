@@ -20,7 +20,7 @@ public class TopicController {
 	@Autowired
 	TopicService topicService;
 	
-	@GetMapping("Reg")
+	@GetMapping("topicReg")
 	public String Reg() {
 		
 		return "topic/topicReg";
