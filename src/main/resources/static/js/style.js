@@ -106,11 +106,24 @@ function getCategory_List(e) {
 		//////////////////////////////////////////////////
 		//비동기콜백에서 category_create() 호출
 		//비동기호출후 category_set() 호출
-		category_create(); //다음 카테고리생성
+		//category_create(); //다음 카테고리생성
 		//////////////////////////////////////////////////
-
 		
-	} 
+		$.ajax({
+			type:"get",
+			url:'/getCategoryChild/'+obj.group_id+'/'+obj.category_lv+'/'+obj.category_detail_lv,
+			success:function(data){
+				category_create(data);
+			},
+			error:function(err,status){}
+		})
+		
+	}
+	
+	//////////////////////////////////////////
+	//사용자가 클릭한 값을 form에다가 세팅
+	
+	$(e.target).category_set();
 	
 }
 //카테고리세팅
@@ -129,11 +142,12 @@ $.fn.category_remove = function() {
 function category_create(data) {
 
 	//예시데이터
-	var data = [
+	/*var data = [
 	 {category_lv: 2, group_id: 'B', category_detail_nm: '값선택', category_detail_parent_nm: '값선택'},
 	 {category_lv: 2, group_id: 'B', category_detail_nm: '값선택', category_detail_parent_nm: '값선택'},
 	 {category_lv: 2, group_id: 'B', category_detail_nm: '값선택', category_detail_parent_nm: '값선택'}
   ];
+*/
 
 	var category = "";
 	category += '<ul class="categoryList" style="position: relative;" onclick="getCategory_List(event);" >';

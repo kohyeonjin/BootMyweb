@@ -25,5 +25,6 @@ public class ProductVO {
 	private String prod_purchase_yn;
 	private String prod_content;
 	private String prod_comment;
+	private String category_nav;
 	
 }

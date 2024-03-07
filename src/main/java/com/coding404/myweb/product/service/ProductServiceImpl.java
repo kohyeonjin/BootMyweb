@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.coding404.myweb.command.CategoryVO;
 import com.coding404.myweb.command.ProductVO;
 import com.coding404.myweb.util.Criteria;
 
@@ -49,6 +50,18 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public int getTotal(Criteria cri) {
 		return productMapper.getTotal(cri);
+	}
+
+	@Override
+	public ArrayList<CategoryVO> getCategory() {
+		
+		return productMapper.getCategory();
+	}
+
+	@Override
+	public ArrayList<CategoryVO> getCategoryChild(CategoryVO vo) {
+		
+		return productMapper.getCategoryChild(vo);
 	}
 
 	
