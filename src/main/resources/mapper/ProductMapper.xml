@@ -59,7 +59,7 @@
 	</select> -->
 	
 	<select id="getList" resultType="ProductVO">
-	select P.* , C.CATEGORY_KEY , C.CATEGORY_NAV
+	select P.*,C.CATEGORY_NAV
 	FROM(
 	select * 
 	 	from PRODUCT 
@@ -122,7 +122,22 @@ ON P.PROD_CATEGORY = C.CATEGORY_KEY;
 	</select>
 	
 	<select id="getDetail" resultType="ProductVO">
-		select * from PRODUCT where prod_id = #{prod_id}
+		select * from PRODUCT P 
+		LEFT JOIN (SELECT
+       CONCAT(A1.group_ID, A1.CATEGORY_ID) AS CATEGORY_KEY, ##카테고리 키 (그룹 + 키 형태로 카테고리분류)
+ 	   CASE A1.category_parent_LV
+ 	        WHEN 0 THEN A1.category_detail_NM
+ 			WHEN 1 THEN CONCAT(A2.category_detail_NM,' > ', A1.category_detail_NM)
+ 			WHEN 2 THEN CONCAT(A3.category_detail_NM, ' > ', A2.category_detail_NM,' > ', A1.category_detail_NM)
+ 	   END as CATEGORY_NAV
+FROM PRODUCT_CATEGORY A1
+LEFT OUTER JOIN PRODUCT_CATEGORY A2
+ON A1.CATEGORY_PARENT_LV = A2.CATEGORY_LV AND A1.CATEGORY_DETAIL_PARENT_LV = A2.CATEGORY_DETAIL_LV AND A1.GROUP_ID = A2.GROUP_ID
+LEFT OUTER JOIN PRODUCT_CATEGORY A3
+ON A2.CATEGORY_PARENT_LV = A3.CATEGORY_LV AND A2.CATEGORY_DETAIL_PARENT_LV = A3.CATEGORY_DETAIL_LV
+ORDER BY CATEGORY_NAV ASC) C
+ON P.PROD_CATEGORY = C.CATEGORY_KEY
+where prod_id = #{prod_id}
 	</select>
 	
 	<update id="update">
@@ -150,5 +165,42 @@ ON P.PROD_CATEGORY = C.CATEGORY_KEY;
 		where group_id = #{group_id}
 		and category_parent_lv = #{category_lv}
 		and category_detail_parent_lv = #{category_detail_lv}
+	</select>
+	<!-- 파일업로드 -->
+	<!-- 
+	1. insert 전에 product테이블의 키값이 FK로 사용되기 때뮨에 반드시 필요합니다.
+		selectKey를 사용하면 됩니다.
+	2.update , delete에도 사용가능
+	3.조회된 결과가 1행이여야한다.
+	
+	
+	resultType = 조회한 결과를 반환받을 타입
+	keyProperty = 조회한 값을 저장할 속성명
+	order는 BEFORE,AFTER 속성 사용가능, SQL문이 전 후 적용순서
+	 -->
+	<insert id="registFile">
+	<selectKey resultType="int" keyProperty="prod_id" order="BEFORE">
+		select max(prod_id) from PRODUCT where prod_writer = #{prod_writer}
+	</selectKey>
+	
+	insert into PRODUCT_UPLOAD(
+		filename,
+		filepath,
+		uuid,
+		prod_id,
+		prod_writer
+	)
+	values(
+	#{filename},
+	#{filepath},
+	#{uuid},
+	#{prod_id},
+	#{prod_writer}
+	)
+	</insert>
+	
+	
+	<select id="getImgs" resultType="ProductUploadVO">
+		select * from PRODUCT_UPLOAD where prod_id = #{prod_id}
 	</select>
 </mapper>

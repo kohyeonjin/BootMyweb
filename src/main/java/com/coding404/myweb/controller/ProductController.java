@@ -1,6 +1,8 @@
 package com.coding404.myweb.controller;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -10,8 +12,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.coding404.myweb.command.ProductUploadVO;
 import com.coding404.myweb.command.ProductVO;
 import com.coding404.myweb.product.service.ProductService;
 import com.coding404.myweb.util.Criteria;
@@ -50,20 +54,37 @@ public class ProductController {
 		@GetMapping("/productDetail")
 		public String detail(@RequestParam("prod_id") int prod_id , Model model) {
 			
-			ProductVO vo = productService.getDetail(prod_id);
+			ProductVO vo = productService.getDetail(prod_id); //상품내용
+			ArrayList<ProductUploadVO> imgs = productService.getImgs(prod_id); //이미지들
+			
 			model.addAttribute("vo",vo);
+			model.addAttribute("imgs",imgs);
+			//화면에 데이터 출력...
+			
 			
 			return "product/productDetail";
 		}
 		
 		@PostMapping("/productForm")
-		public String productForm(ProductVO vo, RedirectAttributes ra) {
+		public String productForm(ProductVO vo, RedirectAttributes ra,
+								  @RequestParam("file") List<MultipartFile> list) {
 			
-			int result = productService.regist(vo);
+			//1.공백인 이미지는 제거
+			list = list.stream().filter(m -> m.isEmpty() == false).collect(Collectors.toList());
+			//2.이미지 파일인지 검사
+			for(MultipartFile file : list) {
+				if(file.getContentType().contains("image") == false) {
+					ra.addFlashAttribute("msg","이미지는 필수로 선택하되 png, jpg, jpeg");
+					return "redirect:/product/productList";
+				}
+			}
+			//3.이미지를 올린경우는 서비스로 위임
+			int result = productService.regist(vo,list);
+			
+			System.out.println("@@@@@@@@@@@@@@@@@@@@@@@" + result);
 			
 			if(result == 1) { 
 				ra.addFlashAttribute("msg", "정상적으로 처리되었습니다");
-				
 			} else {
 				ra.addFlashAttribute("msg", "등록에 실패했습니다");
 			}
