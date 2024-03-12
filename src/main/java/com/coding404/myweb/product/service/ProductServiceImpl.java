@@ -97,8 +97,8 @@ public class ProductServiceImpl implements ProductService {
 	}
 	
 	@Override
-	public ArrayList<ProductVO> getList(Criteria cri) {
-		ArrayList<ProductVO> list = productMapper.getList(cri);
+	public ArrayList<ProductVO> getList(Criteria cri,String user_id) {
+		ArrayList<ProductVO> list = productMapper.getList(cri,user_id);
 		return list;
 	}
 
@@ -123,8 +123,8 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public int getTotal(Criteria cri) {
-		return productMapper.getTotal(cri);
+	public int getTotal(Criteria cri,String user_id) {
+		return productMapper.getTotal(cri, user_id);
 	}
 
 	@Override

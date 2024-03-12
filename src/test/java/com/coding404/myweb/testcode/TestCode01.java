@@ -39,15 +39,15 @@ public class TestCode01 {
 //		productMapper.getList(new Criteria(3, 10)); //페이지번호, 데이터개수
 //		
 //	}
-	@Test
-	public void test03() {
-		
-		Criteria cri = new Criteria(1, 10);
-		cri.setSearchName("10");
-		cri.setStartDate("2024-04-04");
-		cri.setEndDate("2024-06-10");
-		cri.setSearchPrice("desc");
-		
-		productMapper.getList(cri);
-	}
+//	@Test
+//	public void test03() {
+//		
+//		Criteria cri = new Criteria(1, 10);
+//		cri.setSearchName("10");
+//		cri.setStartDate("2024-04-04");
+//		cri.setEndDate("2024-06-10");
+//		cri.setSearchPrice("desc");
+//		
+//		productMapper.getList(cri);
+//	}
 }

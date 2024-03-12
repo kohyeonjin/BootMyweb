@@ -14,8 +14,8 @@ import com.coding404.myweb.util.Criteria;
 public interface ProductService {
 	
 	public int regist(ProductVO vo, List<MultipartFile> list);
-	public ArrayList<ProductVO> getList(Criteria cri);
-	public int getTotal(Criteria cri);
+	public ArrayList<ProductVO> getList(Criteria cri, String user_id);
+	public int getTotal(Criteria cri, String user_id);
 	public ProductVO getDetail(int prod_id);
 	public int update(ProductVO vo);
 	public void delete(int prod_id);

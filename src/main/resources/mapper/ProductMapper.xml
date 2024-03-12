@@ -63,28 +63,28 @@
 	FROM(
 	select * 
 	 	from PRODUCT 
-	 	where prod_writer = 'aaa123' 
-	 	<if test="searchName != '' and searchName != null">
-	 		and prod_name like concat('%',#{searchName},'%')
+	 	where prod_writer = #{user_id}
+	 	<if test="cri.searchName != '' and cri.searchName != null">
+	 		and prod_name like concat('%',#{cri.searchName},'%')
 	 	</if>
-	 	<if test="searchContent != '' and searchContent != null">
-	 		and prod_content like concat('%',#{searchName},'%')
+	 	<if test="cri.searchContent != '' and cri.searchContent != null">
+	 		and prod_content like concat('%',#{cri.searchName},'%')
 	 	</if>
-	 	<if test="startDate != '' and startDate != null">
+	 	<if test="cri.startDate != '' and cri.startDate != null">
 	 		<![CDATA[and str_to_date(prod_enddate , '%Y-%m-%d') >= str_to_date(#{startDate} , '%Y-%m-%d')]]>
 	 	</if>
-	 	<if test="endDate != '' and endDate != null">
+	 	<if test="cri.endDate != '' and cri.endDate != null">
 	 		<![CDATA[and str_to_date(prod_enddate , '%Y-%m-%d') <= str_to_date(#{endDate} , '%Y-%m-%d')]]>
 	 	</if>
 	 	order by
-	 	<if test="searchPrice == 'asc'">
+	 	<if test="cri.searchPrice == 'asc'">
 	 		prod_price asc,
 	 	</if>
-	 	<if test="searchPrice == 'desc'">
+	 	<if test="cri.searchPrice == 'desc'">
 	 		prod_price desc,
 	 	</if>
 	 	prod_id desc
-	 	limit #{pageStart} , #{amount}
+	 	limit #{cri.pageStart} , #{cri.amount}
 ) P
 LEFT JOIN (SELECT
        CONCAT(A1.group_ID, A1.CATEGORY_ID) AS CATEGORY_KEY, ##카테고리 키 (그룹 + 키 형태로 카테고리분류)
@@ -93,30 +93,30 @@ LEFT JOIN (SELECT
  			WHEN 1 THEN CONCAT(A2.category_detail_NM,' > ', A1.category_detail_NM)
  			WHEN 2 THEN CONCAT(A3.category_detail_NM, ' > ', A2.category_detail_NM,' > ', A1.category_detail_NM)
  	   END as CATEGORY_NAV
-FROM PRODUCT_CATEGORY A1
-LEFT OUTER JOIN PRODUCT_CATEGORY A2
-ON A1.CATEGORY_PARENT_LV = A2.CATEGORY_LV AND A1.CATEGORY_DETAIL_PARENT_LV = A2.CATEGORY_DETAIL_LV AND A1.GROUP_ID = A2.GROUP_ID
-LEFT OUTER JOIN PRODUCT_CATEGORY A3
-ON A2.CATEGORY_PARENT_LV = A3.CATEGORY_LV AND A2.CATEGORY_DETAIL_PARENT_LV = A3.CATEGORY_DETAIL_LV
-ORDER BY CATEGORY_NAV ASC) C
-ON P.PROD_CATEGORY = C.CATEGORY_KEY;
+	FROM PRODUCT_CATEGORY A1
+	LEFT OUTER JOIN PRODUCT_CATEGORY A2
+	ON A1.CATEGORY_PARENT_LV = A2.CATEGORY_LV AND A1.CATEGORY_DETAIL_PARENT_LV = A2.CATEGORY_DETAIL_LV AND A1.GROUP_ID = A2.GROUP_ID
+	LEFT OUTER JOIN PRODUCT_CATEGORY A3
+	ON A2.CATEGORY_PARENT_LV = A3.CATEGORY_LV AND A2.CATEGORY_DETAIL_PARENT_LV = A3.CATEGORY_DETAIL_LV
+	ORDER BY CATEGORY_NAV ASC) C
+	ON P.PROD_CATEGORY = C.CATEGORY_KEY;
 	
 	</select>
 	
 	<select id="getTotal" resultType="int">
 	select count(*) as total
 	 from PRODUCT 
-	 where prod_writer = 'aaa123'
-	 <if test="searchName != '' and searchName != null">
-	 		and prod_name like concat('%',#{searchName},'%')
+	 where prod_writer = #{user_id}
+	 <if test="cri.searchName != '' and cri.searchName != null">
+	 		and prod_name like concat('%',#{cri.searchName},'%')
 	 	</if>
-	 	<if test="searchContent != '' and searchContent != null">
-	 		and prod_content like concat('%',#{searchName},'%')
+	 	<if test="cri.searchContent != '' and cri.searchContent != null">
+	 		and prod_content like concat('%',#{cri.searchName},'%')
 	 	</if>
-	 	<if test="startDate != '' and startDate != null">
+	 	<if test="cri.startDate != '' and cri.startDate != null">
 	 		<![CDATA[and str_to_date(prod_enddate , '%Y-%m-%d') >= str_to_date(#{startDate} , '%Y-%m-%d')]]>
 	 	</if>
-	 	<if test="endDate != '' and endDate != null">
+	 	<if test="cri.endDate != '' and cri.endDate != null">
 	 		<![CDATA[and str_to_date(prod_enddate , '%Y-%m-%d') <= str_to_date(#{endDate} , '%Y-%m-%d')]]>
 	 	</if>
 	</select>

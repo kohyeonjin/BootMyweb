@@ -80,4 +80,32 @@ public class AjaxController {
 	
 	
 }
+	
+	@GetMapping("/download/{filepath}/{uuid}/{filename}")
+	public ResponseEntity<byte[]> download(@PathVariable("filepath") String filepath
+										 ,@PathVariable("uuid") String uuid
+										 ,@PathVariable("filename") String filename){
+		
+		//로컬에 있는 파일데이터 byte 정보
+		
+		ResponseEntity<byte[]> entity = null;
+		
+		try {
+			String savePath = uploadPath + "/" + filepath + "/" + uuid + "_" + filename;
+			File file = new File(savePath);
+			//데이터
+			byte[] arr = FileCopyUtils.copyToByteArray(file);
+			//헤더
+			HttpHeaders header = new HttpHeaders();
+			header.add("Content-Disposition" ,"attachment; filename=" + filename);
+			entity = new ResponseEntity<>(arr , header , HttpStatus.OK);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return entity;
+	
+	
+}
 }

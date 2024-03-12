@@ -57,7 +57,7 @@
                                                                 <div class="productImg">
                                                                 	<th:block th:each="img : ${imgs}">
                                                                 	<div class="imgItem">
-                                                                        <span class="imgKind">대표이미지</span>
+                                                                        <span class="imgKind">대표이미지 <a th:href="@{/download/{filepath}/{uuid}/{filename}(filepath=${img.filepath},uuid=${img.uuid},filename=${img.filename})}">다운로드</a></span>
                                                                         <div class="imgWrap">
                                                                             <div class="imgArea">
                                                                                <!-- <img th:src="이미지정보를 가져오는 controller 호출"> -->
